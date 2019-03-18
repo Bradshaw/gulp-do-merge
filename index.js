@@ -3,26 +3,24 @@
 var through = require('through2');
 var path = require('path');
 var PluginError = require('plugin-error');
-var yaml = require('js-yaml');
-var merge = require('lodash.merge');
 var File = require('vinyl');
 
-module.exports = function (file, opt) {
+module.exports = function (file, mergeFunc, dumpFunc, initial) {
   if (!file) {
-    throw new PluginError('gulp-yaml-merge', 'Missing file option for gulp-yaml-merge');
+    throw new PluginError('gulp-do-merge', 'Missing file option for gulp-do-merge');
   }
-
-  opt = opt || {};
-
-  var loadOptions = opt.load || {};
-  var dumpOptions = opt.dump || {};
+  if (typeof file !== 'string' && typeof file.path !== 'string') {
+    throw new PluginError('gulp-do-merge', 'Missing path in file options for gulp-do-merge');
+  }
+  if (!mergeFunc) {
+    throw new PluginError('gulp-do-merge', 'Missing merge function callback for gulp-do-merge');
+  }
+  if (!dumpFunc) {
+    throw new PluginError('gulp-do-merge', 'Missing dump function callback for gulp-do-merge');
+  }
 
   var latestFile;
-  var outData = {};
-
-  if (typeof file !== 'string' && typeof file.path !== 'string') {
-    throw new PluginError('gulp-yaml-merge', 'Missing path in file options for gulp-yaml-merge');
-  }
+  var outData = initial || {};
 
   function bufferContents(file, enc, cb) {
     // ignore empty files
@@ -33,25 +31,15 @@ module.exports = function (file, opt) {
 
     // we don't do streams (yet)
     if (file.isStream()) {
-      this.emit('error', new PluginError('gulp-yaml-merge', 'Streaming not supported'));
+      this.emit('error', new PluginError('gulp-do-merge', 'Streaming not supported'));
       cb();
       return;
     }
 
     latestFile = file;
     
-    // pass file path for yaml error handler
-    loadOptions = merge(loadOptions, {filename: file.path});
-    
-    try {
-      var data = yaml.safeLoad(file.contents, loadOptions);
-    } catch(err) {
-      this.emit('error', new PluginError('gulp-yaml-merge', err));
-      cb();
-      return;
-    }
-
-    outData = merge(outData, data);
+    var data = file.contents.toString('utf8');
+    outData = mergeFunc(outData, data);
 
     cb();
   }
@@ -66,7 +54,7 @@ module.exports = function (file, opt) {
       outFile = new File(file);
     }
 
-    outFile.contents = Buffer.from(yaml.safeDump(outData, dumpOptions));
+    outFile.contents = Buffer.from(dumpFunc(outData));
 
     this.push(outFile);
 

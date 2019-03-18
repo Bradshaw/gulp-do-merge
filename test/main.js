@@ -6,7 +6,7 @@ var assert = require('assert');
 var File = require('vinyl');
 var gulp = require('gulp');
 
-var yamlMerge = require('../index.js');
+var doMerge = require('../index.js');
 
 require('mocha');
 require('should');
@@ -33,77 +33,44 @@ function streamifyString() {
     return stream;
 }
 
-var a = '\
-deep:\n\
-  a:\n\
-    aa: 2\n\
-    ab: 1\n\
-  b:\n\
-    ba: 3\n\
-    bb: 4\n\
-product: \n\
-  - sku: A \n\
-    quantity: 1 \n\
-    description: First \n\
-    price: 100 \n\
-  - sku: B \n\
-    quantity: 2 \n\
-    description: Second \n\
-    price: 200 \n\
-';
+var a = 'This little piggy';
 
-var b = '\
-deep:\n\
-  a:\n\
-    aa: 1\n\
-    ab: 2\n\
-  b:\n\
-    bc: 5\n\
-  c:\n\
-    ba: 6\n\
-    bb: 7\n\
-product: \n\
-  - sku: C \n\
-    quantity: 3 \n\
-    description: Third \n\
-    price: 300 \n\
-';
+var b = 'stayed at home';
 
-var c = '\
-deep:\n\
-  a:\n\
-    aa: 1\n\
-    ab: 2\n\
-  b:\n\
-    ba: 3\n\
-    bb: 4\n\
-    bc: 5\n\
-  c:\n\
-    ba: 6\n\
-    bb: 7\n\
-product:\n\
-  - sku: C\n\
-    quantity: 3\n\
-    description: Third\n\
-    price: 300\n\
-  - sku: B\n\
-    quantity: 2\n\
-    description: Second\n\
-    price: 200\n\
-';
+var c = 'This little piggy stayed at home';
 
-describe('gulp-yaml-merge', function() {
+describe('gulp-do-merge', function() {
 
-    describe('yamlMerge', function() {
+    describe('doMerge', function() {
 
-        it('should throw, when arguments is missing', function() {
+        it('should throw when arguments is missing', function() {
             (function(){
-                yamlMerge();
-            }).should.throw('Missing file option for gulp-yaml-merge');
+                doMerge();
+            }).should.throw('Missing file option for gulp-do-merge');
+        });
+        it('should throw when merge callback is missing', function() {
+            (function(){
+                doMerge('./tmp/v.yaml');
+            }).should.throw('Missing merge function callback for gulp-do-merge');
+        });
+        it('should throw when dump callback is missing', function() {
+            (function(){
+                doMerge('./tmp/v.yaml',()=>{});
+            }).should.throw('Missing dump function callback for gulp-do-merge');
         });
 
-        it('should concat multiple file', function(done) {
-            var stream = streamifyString(a, b).pipe(yamlMerge('./tmp/v.yaml'));
+        it('should concat multiple files', function(done) {
+            var stream = streamifyString(a, b)
+              .pipe(doMerge(
+                './tmp/v.yaml',
+                (memo, data)=>{
+                  return (memo.length>0?memo+" ":"")+data;
+                },
+                (memo)=>{
+                  return memo
+                },
+                ""
+              ));
 
             stream.on('data', function(file) {
                 file.contents.toString('utf8').should.equal(c);

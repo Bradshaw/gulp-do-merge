@@ -1,7 +1,7 @@
 {
-  "name": "gulp-yaml-merge",
-  "version": "1.0.1",
-  "description": "Merge Yaml files data",
+  "name": "gulp-do-merge",
+  "version": "0.0.1",
+  "description": "Apply custom filters and processes in gulp",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/nyc node_modules/mocha/bin/mocha"
@@ -11,25 +11,26 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ivansky/gulp-yaml-merge.git"
+    "url": "git+https://github.com/ivansky/gulp-do-merge.git"
   },
   "keywords": [
     "gulpplugin",
     "yaml",
     "merge"
   ],
-  "author": "Ivan Martianov <i@ivansky.ru>",
+  "authors": [
+    "Ivan Martianov <i@ivansky.ru>",
+    "Gaeel Bradshaw-Rodriguez <gaeel@nanoleptic.net>"
+  ],
   "engines": {
     "node": ">= 0.10"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ivansky/gulp-yaml-merge/issues"
+    "url": "https://github.com/Bradshaw/gulp-do-merge/issues"
   },
-  "homepage": "https://github.com/ivansky/gulp-yaml-merge#readme",
+  "homepage": "https://github.com/Bradshaw/gulp-do-merge#readme",
   "dependencies": {
-    "js-yaml": "^3.5.2",
-    "lodash.merge": "^4.0.4",
     "plugin-error": "^1.0.1",
     "through2": "^0.6.5",
     "vinyl": "^2.2.0"
