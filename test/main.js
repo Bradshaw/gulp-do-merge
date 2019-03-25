@@ -63,8 +63,8 @@ describe('gulp-do-merge', function() {
             var stream = streamifyString(a, b)
               .pipe(doMerge(
                 './tmp/v.yaml',
-                (memo, data)=>{
-                  return (memo.length>0?memo+" ":"")+data;
+                (memo, file)=>{
+                  return (memo.length>0?memo+" ":"")+file.contents.toString('utf8');
                 },
                 (memo)=>{
                   return memo

@@ -1,21 +1,30 @@
-[![npm version](https://badge.fury.io/js/gulp-yaml-merge.svg)](https://badge.fury.io/js/gulp-yaml-merge)
-[![Code Climate](https://codeclimate.com/github/ivansky/gulp-yaml-merge/badges/gpa.svg)](https://codeclimate.com/github/ivansky/gulp-yaml-merge)
-[![Build Status](https://travis-ci.org/ivansky/gulp-yaml-merge.svg?branch=master)](https://travis-ci.org/ivansky/gulp-yaml-merge)
-
 ## Installation
 
 Install package with NPM and add it to your development dependencies:
 
-`npm install --save-dev gulp-yaml-merge`
+`npm install --save-dev gulp-do-merge`
 
 ## Usage
 
 ```js
-var yamlMerge = require('gulp-yaml-merge');
+var doMerge = require('gulp-do-merge');
+var union = require('lodash.union');
 
-gulp.task('yaml', function() {
-  return gulp.src('./swagger/**/*.yaml')
-    .pipe(yamlMerge('bundle.yaml'))
+// Let's merge together
+gulp.task('mergeTags', function() {
+  return gulp.src('./stuff/**/*.json')
+    .pipe(doMerge(
+      // The file we're writing to
+      'tags.json',
+      // A function that will merge our "data" string into "memo" object
+      (memo, data)=>{
+        return union(memo, JSON.parse(data).tags);
+      },
+      // How we want to write "memo" into the file
+      (memo)=>{
+        return JSON.stringify(memo);
+      }
+    ))
     .pipe(gulp.dest('./dist/'));
 });
 ```

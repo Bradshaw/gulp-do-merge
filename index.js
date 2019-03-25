@@ -38,8 +38,7 @@ module.exports = function (file, mergeFunc, dumpFunc, initial) {
 
     latestFile = file;
     
-    var data = file.contents.toString('utf8');
-    outData = mergeFunc(outData, data);
+    outData = mergeFunc(outData, file);
 
     cb();
   }

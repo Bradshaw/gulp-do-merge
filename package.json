@@ -1,7 +1,7 @@
 {
   "name": "gulp-do-merge",
-  "version": "0.0.1",
-  "description": "Apply custom filters and processes in gulp",
+  "version": "0.0.2",
+  "description": "Apply and merge custom filters and processes in gulp",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/nyc node_modules/mocha/bin/mocha"
