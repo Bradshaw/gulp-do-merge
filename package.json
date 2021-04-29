@@ -1,6 +1,6 @@
 {
   "name": "gulp-do-merge",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Apply and merge custom filters and processes in gulp",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ivansky/gulp-do-merge.git"
+    "url": "git+https://github.com/Bradshaw/gulp-do-merge.git"
   },
   "keywords": [
     "gulpplugin",
@@ -20,7 +20,7 @@
   ],
   "authors": [
     "Ivan Martianov <i@ivansky.ru>",
-    "Gaeel Bradshaw-Rodriguez <gaeel@nanoleptic.net>"
+    "Gaeel Bradshaw-Rodriguez <gaeel@spaceshipsin.space>"
   ],
   "engines": {
     "node": ">= 0.10"
